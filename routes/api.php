@@ -1,29 +1,44 @@
 <?php
 
+use App\Models\Tumit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HelpController;
 use App\Http\Controllers\TumitController;
 use App\Http\Controllers\TumitaController;
-use App\Http\Controllers\TumitLegalController;
+use App\Http\Controllers\TumitHelpController;
 use App\Http\Controllers\TumitaTumitController;
 use App\Http\Controllers\TumitInviteController;
 use App\Http\Controllers\LocalizationController;
 use App\Http\Controllers\TumitRequestController;
 use App\Http\Controllers\TumitaActivityController;
+use App\Http\Controllers\TumitTermsOfUseController;
 use App\Http\Controllers\TumitaNotificationController;
+use App\Http\Controllers\TumitPrivacyPolicyController;
 
 //Help Features  
-Route::get('/help', [HelpController::class, 'index']);
-Route::get('/help/{id}', [HelpController::class, 'show']);  // Get a specific help topic by ID
+Route::get('/tumit/help', [TumitHelpController::class, 'index']);
+Route::get('/tumit/help/{id}', [TumitHelpController::class, 'show']);  // Get a specific help topic by ID
+
 
 //TermsOfUse and Policy
-Route::get('/terms-of-use', [TumitLegalController::class, 'termsOfUse'])->name('terms-of-use');
-Route::get('/privacy-policy', [TumitLegalController::class, 'privacyPolicy'])->name('privacy-policy');
+Route::get('/tumit/terms-of-use', [TumitTermsOfUseController::class, 'termsOfUse'])->name('terms-of-use');
+Route::get('/tumit/privacy-policy', [TumitPrivacyPolicyController::class, 'privacyPolicy'])->name('privacy-policy');
+
+
+//***********Tumit search
+Route::get('/tumit/search/{id}', [TumitController::class, 'search']);
+
+
+//***********Search Tumitas
+Route::get('/tumita/search/{id}', [TumitaController::class, 'search']);
+// ->middleware('auth:api');
+
 
 //Localization
 Route::get('translations/{lang}', [LocalizationController::class, 'getTranslations']);
+
 
 
 
@@ -55,8 +70,6 @@ Route::put('/tumit/request/reject/{requestId}', [TumitRequestController::class,'
 Route::put('/tumit/request/accept/{requestId}', [TumitRequestController::class,'acceptTumitRequest'])->middleware('auth:api');
 Route::put('/tumit/request/retract/{requestId}', [TumitRequestController::class,'retractTumitRequest'])->middleware('auth:api');
 
-//***********Tumit search
-Route::get('/tumit/search/{id}', [TumitController::class, 'search']);
 
 
 
@@ -69,9 +82,6 @@ Route::post('/tumita/profilepic/{id}', [TumitaController::class,'changeProfilePi
 Route::patch('/tumita/password/{id}', [TumitaController::class,'changePassword'])->middleware('auth:api');
 Route::delete('/tumita/{id}', [TumitaController::class,'softDelete'])->middleware('auth:api');
 
-//***********Search Tumitas
-Route::get('/tumita/search/{id}', [TumitaController::class, 'search']);
-// ->middleware('auth:api');
 
 
 Route::get('/tumita-tumit', [TumitaTumitController::class,'index'])->middleware('auth:api');
